@@ -497,7 +497,7 @@ setInterval(function () {
         if (current.bot === "BEN") {
             pollSuperRareBen(current.url, current.imageUrl, current.item, current.useImage);
         } else if(current.bot === "AZEKWOH") {
-            pollNiftyGatewayAzekwoh(current.url,current.collectionId,current.imageUrl,current.name);
+            pollNiftyGatewayAzekwoh(current.url,current.collectionId,current.image,current.name);
         } else {
             if (!current.isSR) {
                 pollNiftyGatewayKarisma(current.url, currentItem + 1, current.image,current.name);
