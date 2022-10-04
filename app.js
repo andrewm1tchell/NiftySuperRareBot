@@ -5,7 +5,7 @@ const pool = new Pool({
         rejectUnauthorized: false
     }
 });
-const krismaTweet = require("./Artists/krisma_tweet");
+const karismaTweet = require("./Artists/krisma_tweet");
 const azekwohTweet = require("./Artists/azekowh_tweet");
 const benTweet = require("./Artists/ben_tweet");
 const webdriver = require("selenium-webdriver");
@@ -136,6 +136,46 @@ const nifties = [{
         collectionId: 6,
         image: "https://media.niftygateway.com/image/upload/q_auto:best,w_1600,c_limit/v1640882752/ADaniel/AnthonyAzekwoh/22.1.6/Solomon_Study_1_-_Anthony_Azekwoh_obdzob.jpg",
         name: "Study of Solomon 1",
+        isSR: false,
+        bot: "AZEKWOH"
+    },
+    {
+        url: "https://www.niftygateway.com/marketplace/collection/0x9c620b9e8fc4421b8eeb607d8e5611197867c4a5/1",
+        collectionId: 6,
+        image: "https://media.niftygateway.com/image/upload/q_auto:good,w_500/v1664138632/test-media-manager/AAStudios/UNITY%202.jpg",
+        name: "Unity",
+        isSR: false,
+        bot: "AZEKWOH"
+    },
+    {
+        url: "https://www.niftygateway.com/marketplace/collection/0x9c620b9e8fc4421b8eeb607d8e5611197867c4a5/2",
+        collectionId: 6,
+        image: "https://media.niftygateway.com/image/upload/q_auto:good,w_500/v1664138260/test-media-manager/AAStudios/Anyanwu.jpg",
+        name: "Anyanwu",
+        isSR: false,
+        bot: "AZEKWOH"
+    },
+    {
+        url: "https://www.niftygateway.com/marketplace/collection/0x9c620b9e8fc4421b8eeb607d8e5611197867c4a5/3",
+        collectionId: 6,
+        image: "https://media.niftygateway.com/image/upload/q_auto:good,w_500/v1664228600/test-media-manager/AAStudios/SEEKER.jpg",
+        name: "Seeker",
+        isSR: false,
+        bot: "AZEKWOH"
+    },
+    {
+        url: "https://www.niftygateway.com/marketplace/collection/0x9c620b9e8fc4421b8eeb607d8e5611197867c4a5/4",
+        collectionId: 6,
+        image: "https://media.niftygateway.com/image/upload/q_auto:good,w_500/v1664028616/test-media-manager/AAStudios/Ihuoma.png",
+        name: "Ihuoma",
+        isSR: false,
+        bot: "AZEKWOH"
+    },
+    {
+        url: "https://www.niftygateway.com/marketplace/collection/0x9c620b9e8fc4421b8eeb607d8e5611197867c4a5/5",
+        collectionId: 6,
+        image: "https://media.niftygateway.com/image/upload/q_auto:good,w_500/v1664138426/test-media-manager/AAStudios/amala.jpg",
+        name: "Distinguished of Amala Date",
         isSR: false,
         bot: "AZEKWOH"
     },
@@ -537,7 +577,7 @@ function pollNiftyGatewayKarisma(url, collectionId, imageUrl, item) {
                                             if (err) {
 
                                             } else {
-                                                //  karismaTweet.tweetWithImage(tweetey.text, tweetey.url);
+                                                karismaTweet.tweetWithImage(tweetey.text, tweetey.url);
                                             }
                                         });
                                     }
@@ -626,7 +666,7 @@ function pollSuperrareKarisma(url, collectionId, imageUrl, item) {
                                 if (err) {
 
                                 } else {
-                                    // karismaTweet.tweetWithImage(tweetey.text, tweetey.url);
+                                    karismaTweet.tweetWithImage(tweetey.text, tweetey.url);
                                 }
                             });
                         }
@@ -753,7 +793,7 @@ function pollNiftyGatewayAzekwoh(url, collectionId, imageUrl, item) {
                                             if (err) {
 
                                             } else {
-                                                //  azekwohTweet.tweetWithImage(tweetey.text, tweetey.url);
+                                                azekwohTweet.tweetWithImage(tweetey.text, tweetey.url);
                                             }
                                         });
                                     }
@@ -868,7 +908,7 @@ function pollSuperRareBen(url, imageUrl, item, useImage) {
                 isPolling = false;
                 await driver.quit();
                 for (let i = 0; i < tweets.length; i++) {
-                    // await benTweet.tweetWithImage(tweets[i].text, tweets[i].imageUrl);
+                     await benTweet.tweetWithImage(tweets[i].text, tweets[i].imageUrl);
                 }
             }
         } catch(e) {
