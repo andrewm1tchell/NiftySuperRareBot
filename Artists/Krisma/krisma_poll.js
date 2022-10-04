@@ -336,7 +336,7 @@ function pollSuperrare(url, collectionId, imageUrl, item) {
 function pollOpenSea() {
     var lastSaleTime = cache.get('lastSaleTimeKrisma-OPENSEA', null);
     if (lastSaleTime === null || typeof(lastSaleTime) === 'undefined') {
-        lastSaleTime = moment().add(3, 'h').unix();
+        lastSaleTime = moment().add(5, 'h').unix();
         cache.set('lastSaleTimeKrisma-OPENSEA', lastSaleTime);
     }
 

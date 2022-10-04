@@ -14,7 +14,7 @@ setInterval(() => {
    if(!isPolling) {
       poll().then(r => isPolling = false);
    }
-}, 1000);//360000);
+}, 360000);
 async function poll() {
    isPolling = true;
    console.log("Polling Etienne Crauss");
@@ -73,7 +73,23 @@ async function poll() {
    console.log("Polling Ben");
    ben.pollItems();
 }
-
+let isPolling2 = false;
+setInterval(() => {
+   if(!isPolling2) {
+      poll2().then(r => isPolling2 = false);
+   }
+}, 360000);
+async function poll2() {
+   isPolling2 = true;
+   console.log("Polling Krisma Nifty");
+   krisma.pollSuperRareAndNifty();
+   await sleep(100000);
+   console.log("Polling Azekwoh Nifty");
+   azekwoh.pollSuperRareAndNifty();
+   await sleep(100000);
+   console.log("Polling Ben Nifty");
+   ben.pollItems();
+}
 function sleep(ms) {
    return new Promise(resolve => setTimeout(resolve, ms));
 }
