@@ -465,7 +465,7 @@ setInterval(function () {
             }
         }
     }
-}, 1000);
+}, 67000);
 
 function pollNiftyGatewayKarisma(url, collectionId, imageUrl, item) {
     isPolling = true;
