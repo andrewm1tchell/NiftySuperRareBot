@@ -10,7 +10,7 @@ setInterval(() => {
    if(!isPolling) {
       poll().then(r => isPolling = false);
    }
-}, 10000);
+}, 360000);
 async function poll() {
    isPolling = true;
    console.log("Polling Etienne Crauss");
