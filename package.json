@@ -9,10 +9,15 @@
     "license": "ISC",
     "dependencies": {
         "axios": "^0.21.4",
+        "chromedriver": "^104.0.0",
         "ethers": "^5.3.1",
         "lodash": "^4.17.21",
+        "mime": "^3.0.0",
         "moment": "^2.29.1",
-        "selenium-webdriver": "^4.0.0",
+        "node-fetch": "^3.2.4",
+        "pg": "^8.7.3",
+        "selenium-dom": "^1.0.0",
+        "selenium-webdriver": "^2.53.3",
         "twit": "^2.2.11",
         "twitter-api-v2": "^1.12.0",
         "twitter-v2": "^1.1.0"
