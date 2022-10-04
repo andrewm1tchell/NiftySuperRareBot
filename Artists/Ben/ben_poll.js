@@ -372,7 +372,6 @@ function pollSuperRare(url, imageUrl, item, id, useImage) {
                 for (let i = 1; i < 100; i++) { //Only works for items with < 100 offers this can be increased to 1000 though that is unrealistic
                     try {
                         var text = await driver.findElement(webdriver.By.xpath("//html/body/div[1]/div/div/div[2]/div/section/div[5]/div[" + i + "]/div/div[2]/div[2]")).getText();
-                        console.log(text);
                         if (text.includes("transferred to @ben_vault")) {
                             break;
                             //Here you would check if the offer is more recent than the last saved offer time.

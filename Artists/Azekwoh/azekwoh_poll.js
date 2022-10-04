@@ -149,9 +149,7 @@ function pollNiftyGateway(url, collectionId, imageUrl, item) {
                             let qry = "SELECT * FROM TWEETS WHERE FROMBOT = 'AZEKWOH' AND VALUE LIKE '%"+originalEventText+"%';";
                             pool.query(qry, (err,res) => {
                                 if (err) {
-                                    console.log(err);
                                 } else {
-                                    console.log(res.rowCount);
                                     if(res.rowCount > 0) {
 
                                     } else {
