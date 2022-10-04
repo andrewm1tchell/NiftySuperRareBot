@@ -2,10 +2,10 @@ const axios = require('axios');
 const twit = require('twit');
 
 const twitterConfig = {
-    consumer_key: "5Zll62b8t71YHFGGPUkdpaSmx",
-    consumer_secret: "hpNgCOpOqlvQk0HXM25LoTSU9OhpEfCOsNqQ0ltCnrC3y5dNfW",
-    access_token: "1541616438687023105-OOnR2dTBDgNqri7U0238fOHku1ThFw",
-    access_token_secret: "o6CLF7RKMFE6fjyaHVlBj7RJzwegVyjeRmM6QWGUJQXrE"
+    consumer_key: "GYi0Xr75MFicRT6f7QI43h6i1", //process.env.CONSUMER_KEY, 
+    consumer_secret: "yhB9YBw3dk7yU50ZoNae9CLRvGyJwmRTNnnnUAxgSfRmhG0IzE",//process.env.CONSUMER_SECRET, 
+    access_token: "1559289865153310721-9TnvHjBDylqqmTRy5Xg10wttuWQlXN",//process.env.ACCESS_TOKEN_KEY, 
+    access_token_secret: "H8ZRG8yaai9F1fNsNBZ1yjrabNeCIeTZcVmd9A7CLepSs"//process.env.ACCESS_TOKEN_SECRET,
 };
 
 const twitterClient = new twit(twitterConfig);

@@ -2,10 +2,10 @@ const axios = require('axios');
 const twit = require('twit');
 
 const twitterConfig = {
-    consumer_key: "5Zll62b8t71YHFGGPUkdpaSmx",
-    consumer_secret: "hpNgCOpOqlvQk0HXM25LoTSU9OhpEfCOsNqQ0ltCnrC3y5dNfW",
-    access_token: "1541616438687023105-OOnR2dTBDgNqri7U0238fOHku1ThFw",
-    access_token_secret: "o6CLF7RKMFE6fjyaHVlBj7RJzwegVyjeRmM6QWGUJQXrE"
+    consumer_key: "qzMCcNZfyNn1B3DwCUcdOsQpK",
+    consumer_secret: "9U7qdQrV92PUJ112w25xNqLFwxsMemUmGsfISmjoBxzZdGjStz", 
+    access_token: "1558944561208201217-rM43gd7BwSlmHMNBFZvTdYQdnd3zJM",
+    access_token_secret: "7MwFNru78jnsKvcRdF6AVWriuRdQsf4PJbdoDh5vAjre9"
 };
 
 const twitterClient = new twit(twitterConfig);
@@ -51,16 +51,7 @@ function getBase64(url) {
     return axios.get(url, { responseType: 'arraybuffer'}).then(response => Buffer.from(response.data, 'binary').toString('base64'))
 }
 
-async function retweeter(tweetId) {
-    // Format our image to base64
-    // Upload the item's image from OpenSea to Twitter & retrieve a reference to it
-    twitterClient.post('statuses/retweet/' + tweetId, { }, (response) => {
-        console.log(response);
-    });
-}
-
 module.exports = {
     tweet: tweet,
-    tweetWithImage: tweetWithImage,
-    retweeter: retweeter
+    tweetWithImage: tweetWithImage
 };
