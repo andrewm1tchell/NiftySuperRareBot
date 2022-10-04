@@ -1,6 +1,21 @@
+const axios = require('axios');
+const _ = require('lodash');
+const moment = require('moment');
+const cache = require('cache');
+const format = require('formatTweet');
+const {Pool} = require("pg");
+const chrome = require("selenium-webdriver/chrome");
+const webdriver = require("selenium-webdriver");
+const pool = new Pool({
+    connectionString: "postgres://hicqtfqt:O8O43l-oGpzGyRFi0iQ6Ih2MDKGD3ZWd@jelani.db.elephantsql.com/hicqtfqt",
+    ssl: {
+        rejectUnauthorized: false
+    }
+});
 const krismaTweet = require("./Artists/krisma_tweet");
 const azekwohTweet = require("/Artists/azekowh_tweet");
-const benTweet = require("/Artists/ben_tweet");
+const benTweet = require("./Artists/ben_tweet");
+
 const nifties = [{
     url: "https://www.niftygateway.com/marketplace/collection/0x746fb94befd3435358847228f111dde8dea91ef5/1",
     image: "https://media.niftygateway.com/image/upload/q_auto:good,w_500,c_limit/v1659730040/Julian/KarismaAug16/The_dead_waltz_through_the_streets_t1nmzl.png",
