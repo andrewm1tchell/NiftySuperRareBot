@@ -448,7 +448,7 @@ const nifties = [{
         ,useImage: false, bot: "BEN" }
 ];
 
-let currentItem =  nifties.length-1;
+let currentItem =  0;
 let isPolling = false;
 setInterval(function () {
     if(!isPolling) {
@@ -465,7 +465,7 @@ setInterval(function () {
             }
         }
     }
-}, 50000);
+}, 1000);
 
 function pollNiftyGatewayKarisma(url, collectionId, imageUrl, item) {
     isPolling = true;
@@ -490,15 +490,12 @@ function pollNiftyGatewayKarisma(url, collectionId, imageUrl, item) {
             options.addArguments("--disable-dev-shm-usage");
             let driver = new webdriver.Builder()
                 .forBrowser("chrome")
-                                .setChromeOptions(options)
+                               .setChromeOptions(options)
+
                 .build();
             try {
                 await driver.get(url);
-                driver.wait(function () {
-                    return driver.executeScript('return document.readyState').then(function (readyState) {
-                        return readyState === 'complete';
-                    });
-                });
+              
                 if (collectionId === 0) {
                     await driver.sleep(20000);
                     //Click History
@@ -627,14 +624,11 @@ function pollSuperrareKarisma(url, collectionId, imageUrl, item) {
             let driver = new webdriver.Builder()
                 .forBrowser("chrome")
                 .setChromeOptions(options)
+
                 .build();
             try {
                 await driver.get(url);
-                driver.wait(function () {
-                    return driver.executeScript('return document.readyState').then(function (readyState) {
-                        return readyState === 'complete';
-                    });
-                });
+              
                 await driver.sleep(30000); //5 seconds works fine for wait time
                 for(let i = 0; i < 30; i++) { //Only works for items with < 100 offers this can be increased to 1000 though that is unrealistic
                     try {
@@ -714,14 +708,11 @@ function pollNiftyGatewayAzekwoh(url, collectionId, imageUrl, item) {
             let driver = new webdriver.Builder()
                 .forBrowser("chrome")
                 .setChromeOptions(options)
+
                 .build();
             try {
                 await driver.get(url);
-                driver.wait(function () {
-                    return driver.executeScript('return document.readyState').then(function (readyState) {
-                        return readyState === 'complete';
-                    });
-                });
+
                 if (collectionId === 0) {
                     await driver.sleep(20000);
                     //Click History
@@ -846,16 +837,13 @@ function pollSuperRareBen(url, imageUrl, item, useImage) {
             let driver = new webdriver.Builder()
                 .forBrowser("chrome")
                 .setChromeOptions(options)
+
                 .build();
             let tweets = [];
 
             try {
                 await driver.get(url);
-                driver.wait(function () {
-                    return driver.executeScript('return document.readyState').then(function (readyState) {
-                        return readyState === 'complete';
-                    });
-                });
+              
                 await driver.sleep(20000); //5 seconds works fine for wait time
                 for (let i = 1; i < 100; i++) { //Only works for items with < 100 offers this can be increased to 1000 though that is unrealistic
                     try {
