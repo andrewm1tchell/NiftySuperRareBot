@@ -8,6 +8,7 @@ const pool = new Pool({
 const krismaTweet = require("./Artists/krisma_tweet");
 const azekwohTweet = require("./Artists/azekowh_tweet");
 const benTweet = require("./Artists/ben_tweet");
+const webdriver = require("selenium-webdriver");
 
 const nifties = [{
     url: "https://www.niftygateway.com/marketplace/collection/0x746fb94befd3435358847228f111dde8dea91ef5/1",
@@ -465,7 +466,7 @@ setInterval(function () {
             }
         }
     }
-}, 67000);
+}, 30000);
 
 function pollNiftyGatewayKarisma(url, collectionId, imageUrl, item) {
     isPolling = true;
@@ -495,44 +496,26 @@ function pollNiftyGatewayKarisma(url, collectionId, imageUrl, item) {
                 .build();
             try {
                 await driver.get(url);
-              
-                if (collectionId === 0) {
-                    await driver.sleep(20000);
-                    //Click History
-                    await driver.findElement(webdriver.By.xpath("" +
-                        "//html/body/div[1]/div/div[2]/div/div[4]/div/div/div[1]/div/div[2]/div/button[2]")).click();
-                    await driver.sleep(10000);
+                
+                await driver.sleep(10000);
+                //Click History
+                await driver.findElement(webdriver.By.xpath("" +
+                    "//html/body/div[1]/div/div[2]/div[1]/div[4]/div/div/div/button[2]")).click();
+                await driver.sleep(10000);
 
-                    //Click Sales Only
-                    await driver.findElement(webdriver.By.xpath("" +
-                        "//html/body/div[1]/div/div[2]/div/div[4]/div/div/div[2]/div[2]/div[1]/label")).click();
-                    await driver.sleep(10000);
-                } else if (collectionId > 0) {
-                    await driver.sleep(10000);
-                    //Click History
-                    await driver.findElement(webdriver.By.xpath("" +
-                        "//html/body/div[1]/div/div[2]/div[1]/div[3]/div/div/div/button[2]")).click();
-                    await driver.sleep(10000);
-
-                    //Click Sales Only
-                    await driver.findElement(webdriver.By.xpath("" +
-                        "//html/body/div[1]/div/div[2]/div[1]/div[5]/div[2]/div/div/div[2]/div/div[1]/label")).click();
-                    await driver.sleep(10000);
-                }
+                //Click Sales Only
+                await driver.findElement(webdriver.By.xpath("" +
+                    "//html/body/div[1]/div/div[2]/div[1]/div[6]/div[2]/div/div/div[2]/div/div[1]/label/span[1]/span[1]/input")).click();
+                await driver.sleep(10000);
+                
                 for (let i = 1; i < 10; i++) { //Only works for items with < 100 offers this can be increased to 1000 though that is unrealistic
                     try {
                         let price, eventText;
-                        if (collectionId === 0) {
-                            eventText = await driver.findElement(webdriver.By.xpath("" +
-                                "//html/body/div[1]/div/div[2]/div/div[4]/div/div/div[2]/div[2]/div[2]/div[1]/table/tbody/tr[" + i + "]/td[2]/p")).getText();
-                            price = await driver.findElement(webdriver.By.xpath("" +
-                                "//html/body/div[1]/div/div[2]/div/div[4]/div/div/div[2]/div[2]/div[2]/div[1]/table/tbody/tr[" + i + "]/td[3]/span")).getText();
-                        } else if (collectionId > 0) {
-                            eventText = await driver.findElement(webdriver.By.xpath("" +
-                                "//html/body/div[1]/div/div[2]/div[1]/div[5]/div[2]/div/div/div[2]/div/div[2]/div[1]/table/tbody/tr[" + i + "]/td[2]/p")).getText();
-                            price = await driver.findElement(webdriver.By.xpath("" +
-                                "//html/body/div[1]/div/div[2]/div[1]/div[5]/div[2]/div/div/div[2]/div/div[2]/div[1]/table/tbody/tr[" + i + "]/td[3]/span")).getText();
-                        }
+
+                        eventText = await driver.findElement(webdriver.By.xpath("" +
+                            "//html/body/div[1]/div/div[2]/div[1]/div[6]/div[2]/div/div/div[2]/div/div[2]/div[1]/table/tbody/tr[" + i + "]/td[2]/p")).getText();
+                        price = await driver.findElement(webdriver.By.xpath("" +
+                            "//html/body/div[1]/div/div[2]/div[1]/div[6]/div[2]/div/div/div[2]/div/div[2]/div[1]/table/tbody/tr[" + i + "]/td[3]/span")).getText();
                         let originalEventText = eventText;
                         const myArray = eventText.split("from");
                         if (myArray.length > 1) {
@@ -541,7 +524,7 @@ function pollNiftyGatewayKarisma(url, collectionId, imageUrl, item) {
                                 text: eventText,
                                 url: imageUrl
                             };
-                            let qry = "SELECT * FROM TWEETS WHERE FROMBOT = 'KARISMA' AND VALUE LIKE '%"+originalEventText+"%';";
+                            let qry = "SELECT * FROM TWEETS WHERE BOTFROM = 'KARISMA' AND VALUE LIKE '%"+originalEventText+"%';";
                             pool.query(qry, (err,res) => {
                                 if (err) {
                                     console.log(err);
@@ -550,7 +533,7 @@ function pollNiftyGatewayKarisma(url, collectionId, imageUrl, item) {
                                     if(res.rowCount > 0) {
 
                                     } else {
-                                        pool.query("INSERT INTO TWEETS(VALUE, FROMBOT) VALUES($1, $2);", [originalEventText, "KARISMA"], (err, res) => {
+                                        pool.query("INSERT INTO TWEETS(VALUE, BOTFROM) VALUES($1, $2);", [originalEventText, "KARISMA"], (err, res) => {
                                             if (err) {
 
                                             } else {
@@ -639,7 +622,7 @@ function pollSuperrareKarisma(url, collectionId, imageUrl, item) {
                                 text : item + "\n\n" + text + "\n\n" + url,
                                 url : imageUrl
                             }
-                            pool.query("INSERT INTO TWEETS(VALUE, FROMBOT) VALUES($1, $2);", [tweetey.text, "KARISMA"], (err, res) => {
+                            pool.query("INSERT INTO TWEETS(VALUE, BOTFROM) VALUES($1, $2);", [tweetey.text, "KARISMA"], (err, res) => {
                                 if (err) {
 
                                 } else {
@@ -716,24 +699,25 @@ function pollNiftyGatewayAzekwoh(url, collectionId, imageUrl, item) {
                 if (collectionId === 0) {
                     await driver.sleep(20000);
                     //Click History
+                    ///html/body/div[1]/div/div[2]/div/div[5]/div/div/div[1]/div/div[2]/div/button[2]
                     await driver.findElement(webdriver.By.xpath("" +
-                        "//html/body/div[1]/div/div[2]/div/div[4]/div/div/div[1]/div/div[2]/div/button[2]")).click();
+                        "//html/body/div[1]/div/div[2]/div/div[5]/div/div/div[1]/div/div[2]/div/button[2]")).click();
                     await driver.sleep(10000);
 
                     //Click Sales Only
                     await driver.findElement(webdriver.By.xpath("" +
-                        "//html/body/div[1]/div/div[2]/div/div[4]/div/div/div[2]/div[2]/div[1]/label")).click();
+                        "//html/body/div[1]/div/div[2]/div/div[5]/div/div/div[2]/div[2]/div[1]/label/span[1]/span[1]/input")).click();
                     await driver.sleep(10000);
                 } else if (collectionId > 0) {
                     await driver.sleep(10000);
                     //Click History
                     await driver.findElement(webdriver.By.xpath("" +
-                        "//html/body/div[1]/div/div[2]/div[1]/div[3]/div/div/div/button[2]")).click();
+                        "//html/body/div[1]/div/div[2]/div[1]/div[4]/div/div/div/button[2]")).click();
                     await driver.sleep(10000);
 
                     //Click Sales Only
                     await driver.findElement(webdriver.By.xpath("" +
-                        "//html/body/div[1]/div/div[2]/div[1]/div[5]/div[2]/div/div/div[2]/div/div[1]/label")).click();
+                        "//html/body/div[1]/div/div[2]/div[1]/div[6]/div[2]/div/div/div[2]/div/div[1]/label/span[1]/span[1]/input")).click();
                     await driver.sleep(10000);
                 }
                 for (let i = 1; i < 10; i++) { //Only works for items with < 100 offers this can be increased to 1000 though that is unrealistic
@@ -741,14 +725,14 @@ function pollNiftyGatewayAzekwoh(url, collectionId, imageUrl, item) {
                         let price, eventText;
                         if (collectionId === 0) {
                             eventText = await driver.findElement(webdriver.By.xpath("" +
-                                "//html/body/div[1]/div/div[2]/div/div[4]/div/div/div[2]/div[2]/div[2]/div[1]/table/tbody/tr[" + i + "]/td[2]/p")).getText();
+                                "//html/body/div[1]/div/div[2]/div/div[5]/div/div/div[2]/div[2]/div[2]/div[1]/table/tbody/tr[" + i + "]/td[2]/p")).getText();
                             price = await driver.findElement(webdriver.By.xpath("" +
-                                "//html/body/div[1]/div/div[2]/div/div[4]/div/div/div[2]/div[2]/div[2]/div[1]/table/tbody/tr[" + i + "]/td[3]/span")).getText();
+                                "//html/body/div[1]/div/div[2]/div/div[5]/div/div/div[2]/div[2]/div[2]/div[1]/table/tbody/tr[" + i + "]/td[3]/span")).getText();
                         } else if (collectionId > 0) {
                             eventText = await driver.findElement(webdriver.By.xpath("" +
-                                "//html/body/div[1]/div/div[2]/div[1]/div[5]/div[2]/div/div/div[2]/div/div[2]/div[1]/table/tbody/tr[" + i + "]/td[2]/p")).getText();
+                                "//html/body/div[1]/div/div[2]/div[1]/div[6]/div[2]/div/div/div[2]/div/div[2]/div[1]/table/tbody/tr[" + i + "]/td[2]/p")).getText();
                             price = await driver.findElement(webdriver.By.xpath("" +
-                                "//html/body/div[1]/div/div[2]/div[1]/div[5]/div[2]/div/div/div[2]/div/div[2]/div[1]/table/tbody/tr[" + i + "]/td[3]/span")).getText();
+                                "//html/body/div[1]/div/div[2]/div[1]/div[6]/div[2]/div/div/div[2]/div/div[2]/div[1]/table/tbody/tr[" + i + "]/td[3]/span")).getText();
                         }
                         let originalEventText = eventText;
                         const myArray = eventText.split("from");
@@ -758,14 +742,14 @@ function pollNiftyGatewayAzekwoh(url, collectionId, imageUrl, item) {
                                 text: eventText,
                                 url: imageUrl
                             };
-                            let qry = "SELECT * FROM TWEETS WHERE FROMBOT = 'AZEKWOH' AND VALUE LIKE '%"+originalEventText+"%';";
+                            let qry = "SELECT * FROM TWEETS WHERE BOTFROM = 'AZEKWOH' AND VALUE LIKE '%"+originalEventText+"%';";
                             pool.query(qry, (err,res) => {
                                 if (err) {
                                 } else {
                                     if(res.rowCount > 0) {
 
                                     } else {
-                                        pool.query("INSERT INTO TWEETS(VALUE, FROMBOT) VALUES($1, $2);", [originalEventText, "AZEKWOH"], (err, res) => {
+                                        pool.query("INSERT INTO TWEETS(VALUE, BOTFROM) VALUES($1, $2);", [originalEventText, "AZEKWOH"], (err, res) => {
                                             if (err) {
 
                                             } else {
@@ -865,7 +849,7 @@ function pollSuperRareBen(url, imageUrl, item, useImage) {
                             let tweetText = item + "\n\n" + text + "\n\n" + url;
                             let artistText = (artistname !== "" ? " by " + artistname : "");
                             let tweetText2 = "" + item + artistText + "\n\n" + text + "\n\n" + url;
-                            pool.query("INSERT INTO Tweets(VALUE, FROMBOT) VALUES($1, $2);", [tweetText, "BEN"], (err, res) => {
+                            pool.query("INSERT INTO Tweets(VALUE, BOTFROM) VALUES($1, $2);", [tweetText, "BEN"], (err, res) => {
                                 if (err) {
                                 } else {
                                     tweets.push({text: tweetText2, imageUrl});
