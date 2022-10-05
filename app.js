@@ -600,7 +600,7 @@ function pollNiftyGatewayKarisma(url, collectionId, imageUrl, item) {
                                             if (err) {
 
                                             } else {
-                                             //   karismaTweet.tweetWithImage(tweetey.text, tweetey.url);
+                                                karismaTweet.tweetWithImage(tweetey.text, tweetey.url);
                                             }
                                         });
                                     }
@@ -707,7 +707,7 @@ function pollSuperrareKarisma(url, collectionId, imageUrl, item) {
                                 if (err) {
 
                                 } else {
-                                 //   karismaTweet.tweetWithImage(tweetey.text, tweetey.url);
+                                    karismaTweet.tweetWithImage(tweetey.text, tweetey.url);
                                 }
                             });
                         }
@@ -852,7 +852,7 @@ function pollNiftyGatewayAzekwoh(url, collectionId, imageUrl, item) {
                                             if (err) {
 
                                             } else {
-                                             //   azekwohTweet.tweetWithImage(tweetey.text, tweetey.url);
+                                                azekwohTweet.tweetWithImage(tweetey.text, tweetey.url);
                                             }
                                         });
                                     }
@@ -948,7 +948,8 @@ function pollSuperRareBen(url, imageUrl, item, useImage) {
                 await driver.sleep(20000); //5 seconds works fine for wait time
                 for (let i = 1; i < 100; i++) { //Only works for items with < 100 offers this can be increased to 1000 though that is unrealistic
                     try {
-                        var text = await driver.findElement(webdriver.By.xpath("//html/body/div[1]/div/div/div[2]/div/section/div[5]/div[" + i + "]/div/div[2]/div[2]")).getText();
+                        var text = await driver.findElement(webdriver.By
+                            .xpath("//html/body/div[1]/div/div/div[3]/div/section/div[5]/div[" + i + "]/div/div[2]/div[2]")).getText();
                         if (text.includes("transferred to @ben_vault")) {
                             break;
                             //Here you would check if the offer is more recent than the last saved offer time.
@@ -956,12 +957,12 @@ function pollSuperRareBen(url, imageUrl, item, useImage) {
                         } else {
                             var artistname = "";
                             try {
-                                artistname = await driver.findElement(webdriver.By.xpath("//html/body/div[1]/div/div/div[2]/div/section/div[3]/div[1]/a[2]/div/span[2]")).getText();
+                                artistname = await driver.findElement(webdriver.By.xpath("//html/body/div[1]/div/div/div[3]/div/section/div[3]/div[1]/a[2]/div/span[2]")).getText();
                             } catch (e) {
 
                             }
                             if (!useImage) {
-                                imageUrl = await driver.findElement(webdriver.By.xpath("//html/body/div[1]/div/div/div[2]/div/section/div[1]/button/img")).getAttribute("src");
+                                imageUrl = await driver.findElement(webdriver.By.xpath("//html/body/div[1]/div/div/div[3]/div/section/div[1]/button/img")).getAttribute("src");
                             }
                             let tweetText = item + "\n\n" + text + "\n\n" + url;
                             let artistText = (artistname !== "" ? " by " + artistname : "");
@@ -991,7 +992,7 @@ function pollSuperRareBen(url, imageUrl, item, useImage) {
                 isPolling = false;
                 await driver.quit();
                 for (let i = 0; i < tweets.length; i++) {
-                //     await benTweet.tweetWithImage(tweets[i].text, tweets[i].imageUrl);
+                     await benTweet.tweetWithImage(tweets[i].text, tweets[i].imageUrl);
                 }
             }
         } catch(e) {
