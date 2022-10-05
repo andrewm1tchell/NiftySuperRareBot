@@ -489,24 +489,48 @@ const nifties = [{
         ,useImage: false, bot: "BEN" }
 ];
 
-let currentItem =  0;
+let currentItem =  null;
 let isPolling = false;
 setInterval(function () {
     if(!isPolling) {
-        let current = nifties[currentItem];
-        if (current.bot === "BEN") {
-            pollSuperRareBen(current.url, current.imageUrl, current.item, current.useImage);
-        } else if(current.bot === "AZEKWOH") {
-            pollNiftyGatewayAzekwoh(current.url,current.collectionId,current.image,current.name);
+        if(currentItem === null) {
+            pool.query("SELECT VALUE FROM CURRENTITEM WHERE ID = 1;", (err, res) => {
+                if (err) {
+                } else {
+                    currentItem = res.rows[0].value;
+
+                    let current = nifties[currentItem];
+
+                    if (current.bot === "BEN") {
+                        pollSuperRareBen(current.url, current.imageUrl, current.item, current.useImage);
+                    } else if(current.bot === "AZEKWOH") {
+                        pollNiftyGatewayAzekwoh(current.url,current.collectionId,current.image,current.name);
+                    } else {
+                        if (!current.isSR) {
+                            pollNiftyGatewayKarisma(current.url, currentItem + 1, current.image,current.name);
+                        } else {
+                            pollSuperrareKarisma(current.url,currentItem+1,current.image,current.name);
+                        }
+                    }
+                }
+            });
         } else {
-            if (!current.isSR) {
-                pollNiftyGatewayKarisma(current.url, currentItem + 1, current.image,current.name);
+            let current = nifties[currentItem];
+
+            if (current.bot === "BEN") {
+                pollSuperRareBen(current.url, current.imageUrl, current.item, current.useImage);
+            } else if(current.bot === "AZEKWOH") {
+                pollNiftyGatewayAzekwoh(current.url,current.collectionId,current.image,current.name);
             } else {
-                pollSuperrareKarisma(current.url,currentItem+1,current.image,current.name);
+                if (!current.isSR) {
+                    pollNiftyGatewayKarisma(current.url, currentItem + 1, current.image,current.name);
+                } else {
+                    pollSuperrareKarisma(current.url,currentItem+1,current.image,current.name);
+                }
             }
         }
     }
-}, 30000);
+}, 1000);
 
 function pollNiftyGatewayKarisma(url, collectionId, imageUrl, item) {
     isPolling = true;
@@ -531,8 +555,7 @@ function pollNiftyGatewayKarisma(url, collectionId, imageUrl, item) {
             options.addArguments("--disable-dev-shm-usage");
             let driver = new webdriver.Builder()
                 .forBrowser("chrome")
-                               .setChromeOptions(options)
-
+                .setChromeOptions(options)
                 .build();
             try {
                 await driver.get(url);
@@ -600,6 +623,12 @@ function pollNiftyGatewayKarisma(url, collectionId, imageUrl, item) {
                     {
                         currentItem = 0;
                     }
+                    pool.query("UPDATE CURRENTITEM SET VALUE = "+currentItem+"  WHERE ID = 1;", (err, res) => {
+                        if (err) {
+
+                        } else {
+                        }
+                    });
                     isPolling = false;
                 } catch (e) {
                     console.log(e);
@@ -608,6 +637,12 @@ function pollNiftyGatewayKarisma(url, collectionId, imageUrl, item) {
                     {
                         currentItem = 0;
                     }
+                    pool.query("UPDATE CURRENTITEM SET VALUE = "+currentItem+"  WHERE ID = 1;", (err, res) => {
+                        if (err) {
+
+                        } else {
+                        }
+                    });
                     isPolling = false;
                 }
             }
@@ -618,6 +653,12 @@ function pollNiftyGatewayKarisma(url, collectionId, imageUrl, item) {
             {
                 currentItem = 0;
             }
+            pool.query("UPDATE CURRENTITEM SET VALUE = "+currentItem+"  WHERE ID = 1;", (err, res) => {
+                if (err) {
+
+                } else {
+                }
+            });
             isPolling = false;
         }
     })()
@@ -684,6 +725,12 @@ function pollSuperrareKarisma(url, collectionId, imageUrl, item) {
                     {
                         currentItem = 0;
                     }
+                    pool.query("UPDATE CURRENTITEM SET VALUE = "+currentItem+"  WHERE ID = 1;", (err, res) => {
+                        if (err) {
+
+                        } else {
+                        }
+                    });
                     isPolling = false;
                 } catch (e) {
                     console.log(e);
@@ -692,6 +739,12 @@ function pollSuperrareKarisma(url, collectionId, imageUrl, item) {
                     {
                         currentItem = 0;
                     }
+                    pool.query("UPDATE CURRENTITEM SET VALUE = "+currentItem+"  WHERE ID = 1;", (err, res) => {
+                        if (err) {
+
+                        } else {
+                        }
+                    });
                     isPolling = false;
                 }
             }
@@ -702,6 +755,12 @@ function pollSuperrareKarisma(url, collectionId, imageUrl, item) {
             {
                 currentItem = 0;
             }
+            pool.query("UPDATE CURRENTITEM SET VALUE = "+currentItem+"  WHERE ID = 1;", (err, res) => {
+                if (err) {
+
+                } else {
+                }
+            });
             isPolling = false;
         }
     })()
@@ -816,6 +875,12 @@ function pollNiftyGatewayAzekwoh(url, collectionId, imageUrl, item) {
                     {
                         currentItem = 0;
                     }
+                    pool.query("UPDATE CURRENTITEM SET VALUE = "+currentItem+"  WHERE ID = 1;", (err, res) => {
+                        if (err) {
+
+                        } else {
+                        }
+                    });
                     isPolling = false;
                 } catch (e) {
                     console.log(e);
@@ -823,7 +888,13 @@ function pollNiftyGatewayAzekwoh(url, collectionId, imageUrl, item) {
                     if(currentItem >= nifties.length)
                     {
                         currentItem = 0;
-                    }
+                    } 
+                    pool.query("UPDATE CURRENTITEM SET VALUE = "+currentItem+"  WHERE ID = 1;", (err, res) => {
+                        if (err) {
+
+                        } else {
+                        }
+                    });
                     isPolling = false;
                 }
             }
@@ -834,6 +905,12 @@ function pollNiftyGatewayAzekwoh(url, collectionId, imageUrl, item) {
             {
                 currentItem = 0;
             }
+            pool.query("UPDATE CURRENTITEM SET VALUE = "+currentItem+"  WHERE ID = 1;", (err, res) => {
+                if (err) {
+
+                } else {
+                }
+            });
             isPolling = false;
         }
     })()
@@ -905,6 +982,12 @@ function pollSuperRareBen(url, imageUrl, item, useImage) {
                 if (currentItem >= nifties.length) {
                     currentItem = 0;
                 }
+                pool.query("UPDATE CURRENTITEM SET VALUE = "+currentItem+"  WHERE ID = 1;", (err, res) => {
+                    if (err) {
+
+                    } else {
+                    }
+                });
                 isPolling = false;
                 await driver.quit();
                 for (let i = 0; i < tweets.length; i++) {
@@ -917,6 +1000,12 @@ function pollSuperRareBen(url, imageUrl, item, useImage) {
             {
                 currentItem = 0;
             }
+            pool.query("UPDATE CURRENTITEM SET VALUE = "+currentItem+"  WHERE ID = 1;", (err, res) => {
+                if (err) {
+
+                } else {
+                }
+            });
             isPolling = false;
         }
     })()
