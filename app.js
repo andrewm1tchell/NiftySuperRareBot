@@ -8,9 +8,19 @@ const pool = new Pool({
 const karismaTweet = require("./Artists/krisma_tweet");
 const azekwohTweet = require("./Artists/azekowh_tweet");
 const benTweet = require("./Artists/ben_tweet");
+const coryTweet = require("./Artists/cory_tweet");
 const webdriver = require("selenium-webdriver");
+const chrome = require("selenium-webdriver/chrome");
 
-const nifties = [{
+const nifties = [
+    {
+        url: "https://www.niftygateway.com/marketplace/collection/0x74a60c50e53d4fff27275407ee0c0300ea211145/1",
+        image: "https://media.niftygateway.com/video/upload/q_auto:good,w_500/v1654270113/Andrea/CoryVanLew/June2022/Animations/PHASE3-NIFTY_GATEWAY_main_announcement_xn91l8.mp4",
+        name: "[phase three]",
+        isSR: false,
+        bot: "CORYVANLEW"
+    },
+    {
     url: "https://www.niftygateway.com/marketplace/collection/0x746fb94befd3435358847228f111dde8dea91ef5/1",
     image: "https://media.niftygateway.com/image/upload/q_auto:good,w_500,c_limit/v1659730040/Julian/KarismaAug16/The_dead_waltz_through_the_streets_t1nmzl.png",
     name: "The dead waltz through the streets",
@@ -1011,3 +1021,136 @@ function pollSuperRareBen(url, imageUrl, item, useImage) {
         }
     })()
 }
+
+function pollNiftyGatewayCoryVanLew(url, collectionId, imageUrl, item) {
+    isPolling = true;
+    console.log("Searching item:" + url);
+    let tweets = [];
+
+    (async function goToNiftyUrl() {
+        try {
+            const webdriver = require('selenium-webdriver');
+            require('chromedriver');
+            const chrome = require('selenium-webdriver/chrome');
+
+            let options = new chrome.Options();
+            options.setChromeBinaryPath(process.env.CHROME_BINARY_PATH);
+
+            //Don't forget to add these for heroku
+            options.addArguments("--headless");
+            options.addArguments("--disable-gpu");
+            options.addArguments("--no-sandbox");
+            options.addArguments("enable-automation");
+            options.addArguments("--disable-infobars");
+            options.addArguments("--disable-dev-shm-usage");
+            let driver = new webdriver.Builder()
+                .forBrowser("chrome")
+                .setChromeOptions(options)
+                .build();
+            try {
+                await driver.get(url);
+
+                await driver.sleep(10000);
+                //Click History
+                await driver.findElement(webdriver.By.xpath("" +
+                    "//html/body/div[1]/div/div[2]/div[1]/div[4]/div/div/div/button[2]")).click();
+                await driver.sleep(10000);
+
+                //Click Sales Only
+                await driver.findElement(webdriver.By.xpath("" +
+                    "//html/body/div[1]/div/div[2]/div[1]/div[6]/div[2]/div/div/div[2]/div/div[1]/label/span[1]/span[1]/input")).click();
+                await driver.sleep(10000);
+
+                for (let i = 1; i < 10; i++) { //Only works for items with < 100 offers this can be increased to 1000 though that is unrealistic
+                    try {
+                        let price, eventText;
+
+                        eventText = await driver.findElement(webdriver.By.xpath("" +
+                            "//html/body/div[1]/div/div[2]/div[1]/div[6]/div[2]/div/div/div[2]/div/div[2]/div[1]/table/tbody/tr[" + i + "]/td[2]/p")).getText();
+                        price = await driver.findElement(webdriver.By.xpath("" +
+                            "//html/body/div[1]/div/div[2]/div[1]/div[6]/div[2]/div/div/div[2]/div/div[2]/div[1]/table/tbody/tr[" + i + "]/td[3]/span")).getText();
+                        let originalEventText = eventText;
+                        const myArray = eventText.split("from");
+                        if (myArray.length > 1) {
+                            eventText = item + "\n\n" + myArray[0] + "from" + myArray[1].substring(0, myArray[1].length - 1) + " for " + price + "\n\n" + url;
+                            let tweetey = {
+                                text: eventText,
+                                url: imageUrl
+                            };
+                            let qry = "SELECT * FROM TWEETS WHERE BOTFROM = 'CORYVANLEW' AND VALUE LIKE '%"+originalEventText+"%';";
+                            pool.query(qry, (err,res) => {
+                                if (err) {
+                                    console.log(err);
+                                } else {
+                                    console.log(res.rowCount);
+                                    if(res.rowCount > 0) {
+
+                                    } else {
+                                        pool.query("INSERT INTO TWEETS(VALUE, BOTFROM, URL) VALUES($1, $2, $3);", [originalEventText, "CORYVANLEW", url], (err, res) => {
+                                            if (err) {
+
+                                            } else {
+                                                coryTweet.tweetWithImage(tweetey.text, tweetey.url);
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+
+
+                        }
+                    } catch (e) {
+                        //console.log("");
+                    }
+                }
+            } catch (e) {
+                // console.log(e);
+            } finally {
+                try {
+                    await driver.quit();
+                    currentItem++;
+                    if(currentItem >= nifties.length)
+                    {
+                        currentItem = 0;
+                    }
+                    pool.query("UPDATE CURRENTITEM SET VALUE = "+currentItem+"  WHERE ID = 1;", (err, res) => {
+                        if (err) {
+
+                        } else {
+                        }
+                    });
+                    isPolling = false;
+                } catch (e) {
+                    console.log(e);
+                    currentItem++;
+                    if(currentItem >= nifties.length)
+                    {
+                        currentItem = 0;
+                    }
+                    pool.query("UPDATE CURRENTITEM SET VALUE = "+currentItem+"  WHERE ID = 1;", (err, res) => {
+                        if (err) {
+
+                        } else {
+                        }
+                    });
+                    isPolling = false;
+                }
+            }
+        } catch (e) {
+            console.log(e);
+            currentItem++;
+            if(currentItem >= nifties.length)
+            {
+                currentItem = 0;
+            }
+            pool.query("UPDATE CURRENTITEM SET VALUE = "+currentItem+"  WHERE ID = 1;", (err, res) => {
+                if (err) {
+
+                } else {
+                }
+            });
+            isPolling = false;
+        }
+    })()
+}
+
