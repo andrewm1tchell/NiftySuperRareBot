@@ -530,7 +530,7 @@ setInterval(function () {
             }
         }
     }
-}, 1000);
+}, 30000);
 
 function pollNiftyGatewayKarisma(url, collectionId, imageUrl, item) {
     isPolling = true;
