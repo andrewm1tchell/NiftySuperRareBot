@@ -596,11 +596,11 @@ function pollNiftyGatewayKarisma(url, collectionId, imageUrl, item) {
                                     if(res.rowCount > 0) {
 
                                     } else {
-                                        pool.query("INSERT INTO TWEETS(VALUE, BOTFROM) VALUES($1, $2);", [originalEventText, "KARISMA"], (err, res) => {
+                                        pool.query("INSERT INTO TWEETS(VALUE, BOTFROM, URL) VALUES($1, $2, $3);", [originalEventText, "KARISMA", url], (err, res) => {
                                             if (err) {
 
                                             } else {
-                                                karismaTweet.tweetWithImage(tweetey.text, tweetey.url);
+                                             //   karismaTweet.tweetWithImage(tweetey.text, tweetey.url);
                                             }
                                         });
                                     }
@@ -703,11 +703,11 @@ function pollSuperrareKarisma(url, collectionId, imageUrl, item) {
                                 text : item + "\n\n" + text + "\n\n" + url,
                                 url : imageUrl
                             }
-                            pool.query("INSERT INTO TWEETS(VALUE, BOTFROM) VALUES($1, $2);", [tweetey.text, "KARISMA"], (err, res) => {
+                            pool.query("INSERT INTO TWEETS(VALUE, BOTFROM, URL) VALUES($1, $2, $3);", [tweetey.text, "KARISMA", url], (err, res) => {
                                 if (err) {
 
                                 } else {
-                                    karismaTweet.tweetWithImage(tweetey.text, tweetey.url);
+                                 //   karismaTweet.tweetWithImage(tweetey.text, tweetey.url);
                                 }
                             });
                         }
@@ -848,11 +848,11 @@ function pollNiftyGatewayAzekwoh(url, collectionId, imageUrl, item) {
                                     if(res.rowCount > 0) {
 
                                     } else {
-                                        pool.query("INSERT INTO TWEETS(VALUE, BOTFROM) VALUES($1, $2);", [originalEventText, "AZEKWOH"], (err, res) => {
+                                        pool.query("INSERT INTO TWEETS(VALUE, BOTFROM, URL) VALUES($1, $2, $3);", [originalEventText, "AZEKWOH", url], (err, res) => {
                                             if (err) {
 
                                             } else {
-                                                azekwohTweet.tweetWithImage(tweetey.text, tweetey.url);
+                                             //   azekwohTweet.tweetWithImage(tweetey.text, tweetey.url);
                                             }
                                         });
                                     }
@@ -966,7 +966,7 @@ function pollSuperRareBen(url, imageUrl, item, useImage) {
                             let tweetText = item + "\n\n" + text + "\n\n" + url;
                             let artistText = (artistname !== "" ? " by " + artistname : "");
                             let tweetText2 = "" + item + artistText + "\n\n" + text + "\n\n" + url;
-                            pool.query("INSERT INTO Tweets(VALUE, BOTFROM) VALUES($1, $2);", [tweetText, "BEN"], (err, res) => {
+                            pool.query("INSERT INTO TWEETS(VALUE, BOTFROM, URL) VALUES($1, $2, $3);", [tweetText, "BEN", url], (err, res) => {
                                 if (err) {
                                 } else {
                                     tweets.push({text: tweetText2, imageUrl});
@@ -991,7 +991,7 @@ function pollSuperRareBen(url, imageUrl, item, useImage) {
                 isPolling = false;
                 await driver.quit();
                 for (let i = 0; i < tweets.length; i++) {
-                     await benTweet.tweetWithImage(tweets[i].text, tweets[i].imageUrl);
+                //     await benTweet.tweetWithImage(tweets[i].text, tweets[i].imageUrl);
                 }
             }
         } catch(e) {
