@@ -282,12 +282,12 @@ const nifties = [{
         item: "WOW NOW",
         id: 17
         ,useImage: false, bot: "BEN" },
-    {
-        url: "https://superrare.com/artwork-v2/the-year-factory-32177",
-        imageUrl: "https://ipfs.pixura.io/ipfs/QmQmCxDyZGcx6oZUZfs8qbEPwzkT6ajBikQvE7iMzYrUJh/the-year-factory.mp4",
-        item: "The Year Factory",
-        id: 18
-        ,useImage: false, bot: "BEN" },
+    // {
+    //     url: "https://superrare.com/artwork-v2/the-year-factory-32177",
+    //     imageUrl: "https://ipfs.pixura.io/ipfs/QmQmCxDyZGcx6oZUZfs8qbEPwzkT6ajBikQvE7iMzYrUJh/the-year-factory.mp4",
+    //     item: "The Year Factory",
+    //     id: 18
+    //     ,useImage: false, bot: "BEN" },
     {
         url: "https://superrare.com/artwork-v2/m-i-r-a-a-32092",
         imageUrl: "https://ipfs.pixura.io/ipfs/QmdPWE7Xoim666jmskJxpRc24ef2bnxEmEFnPCobsnNeDh/m-i-r-a-a.mp4",
