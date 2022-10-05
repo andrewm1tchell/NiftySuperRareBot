@@ -15,7 +15,7 @@ const chrome = require("selenium-webdriver/chrome");
 const nifties = [
     {
         url: "https://www.niftygateway.com/marketplace/collection/0x74a60c50e53d4fff27275407ee0c0300ea211145/1",
-        image: "https://media.niftygateway.com/video/upload/q_auto:good,w_500/v1654270113/Andrea/CoryVanLew/June2022/Animations/PHASE3-NIFTY_GATEWAY_main_announcement_xn91l8.mp4",
+        image: "https://i.imgur.com/LsFslgQ.gif",
         name: "[phase three]",
         isSR: false,
         bot: "CORYVANLEW"
