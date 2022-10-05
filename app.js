@@ -190,7 +190,7 @@ const nifties = [
         name: "Distinguished of Amala Date",
         isSR: false,
         bot: "AZEKWOH"
-    },
+    }
     // {
     //     url: "https://superrare.com/artwork-v2/%E0%A4%AA%E0%A5%8D%E0%A4%B0%E0%A4%BE%E0%A4%A3-prana-35976",
     //     imageUrl: "https://ipfs.pixura.io/ipfs/Qmcv5WA3HQWMdEc5DEmNThdNwJXdzJmR5Zw71WGurfgb8a/-prana.png",
