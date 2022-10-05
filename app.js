@@ -13,13 +13,13 @@ const webdriver = require("selenium-webdriver");
 const chrome = require("selenium-webdriver/chrome");
 
 const nifties = [
-    {
-        url: "https://www.niftygateway.com/marketplace/collection/0x74a60c50e53d4fff27275407ee0c0300ea211145/1",
-        image: "https://i.imgur.com/LsFslgQ.gif",
-        name: "[phase three]",
-        isSR: false,
-        bot: "CORYVANLEW"
-    },
+    // {
+    //     url: "https://www.niftygateway.com/marketplace/collection/0x74a60c50e53d4fff27275407ee0c0300ea211145/1",
+    //     image: "https://i.imgur.com/UZ1OYOJ.gif",
+    //     name: "[phase three]",
+    //     isSR: false,
+    //     bot: "CORYVANLEW"
+    // },
     {
     url: "https://www.niftygateway.com/marketplace/collection/0x746fb94befd3435358847228f111dde8dea91ef5/1",
     image: "https://media.niftygateway.com/image/upload/q_auto:good,w_500,c_limit/v1659730040/Julian/KarismaAug16/The_dead_waltz_through_the_streets_t1nmzl.png",
@@ -542,7 +542,7 @@ setInterval(function () {
             }
         }
     }
-}, 30000);
+}, 36000);
 
 function pollNiftyGatewayKarisma(url, collectionId, imageUrl, item) {
     isPolling = true;
@@ -1047,7 +1047,7 @@ function pollNiftyGatewayCoryVanLew(url, collectionId, imageUrl, item) {
             options.addArguments("--disable-dev-shm-usage");
             let driver = new webdriver.Builder()
                 .forBrowser("chrome")
-                .setChromeOptions(options)
+            //    .setChromeOptions(options)
                 .build();
             try {
                 await driver.get(url);
