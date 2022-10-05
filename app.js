@@ -1,3 +1,5 @@
+const axios = require('axios');
+const _ = require('lodash');
 const {Pool} = require("pg");
 const pool = new Pool({
     connectionString: "postgres://hicqtfqt:O8O43l-oGpzGyRFi0iQ6Ih2MDKGD3ZWd@jelani.db.elephantsql.com/hicqtfqt",
@@ -13,13 +15,13 @@ const webdriver = require("selenium-webdriver");
 const chrome = require("selenium-webdriver/chrome");
 
 const nifties = [
-    // {
-    //     url: "https://www.niftygateway.com/marketplace/collection/0x74a60c50e53d4fff27275407ee0c0300ea211145/1",
-    //     image: "https://i.imgur.com/UZ1OYOJ.gif",
-    //     name: "[phase three]",
-    //     isSR: false,
-    //     bot: "CORYVANLEW"
-    // },
+    {
+        url: "https://www.niftygateway.com/marketplace/collection/0x74a60c50e53d4fff27275407ee0c0300ea211145/1",
+        image: "https://i.imgur.com/UZ1OYOJ.gif",
+        name: "[phase three]",
+        isSR: false,
+        bot: "CORYVANLEW"
+    },
     {
     url: "https://www.niftygateway.com/marketplace/collection/0x746fb94befd3435358847228f111dde8dea91ef5/1",
     image: "https://media.niftygateway.com/image/upload/q_auto:good,w_500,c_limit/v1659730040/Julian/KarismaAug16/The_dead_waltz_through_the_streets_t1nmzl.png",
@@ -508,7 +510,6 @@ setInterval(function () {
                 if (err) {
                 } else {
                     currentItem = res.rows[0].value;
-
                     let current = nifties[currentItem];
 
                     if (current.bot === "BEN") {
@@ -533,16 +534,18 @@ setInterval(function () {
                 pollSuperRareBen(current.url, current.imageUrl, current.item, current.useImage);
             } else if(current.bot === "AZEKWOH") {
                 pollNiftyGatewayAzekwoh(current.url,current.collectionId,current.image,current.name);
-            } else {
+            } else if (current.bot === "KARISMA") {
                 if (!current.isSR) {
-                    pollNiftyGatewayKarisma(current.url, currentItem + 1, current.image,current.name);
+                    pollNiftyGatewayKarisma(current.url, currentItem + 1, current.image, current.name);
                 } else {
-                    pollSuperrareKarisma(current.url,currentItem+1,current.image,current.name);
+                    pollSuperrareKarisma(current.url, currentItem + 1, current.image, current.name);
                 }
+            } else if(current.bot === "CORYVANLEW") {
+                pollNiftyGatewayCoryVanLew(current.url, currentItem + 1, current.image,current.name);
             }
         }
     }
-}, 36000);
+}, 1000);
 
 function pollNiftyGatewayKarisma(url, collectionId, imageUrl, item) {
     isPolling = true;
@@ -1047,7 +1050,7 @@ function pollNiftyGatewayCoryVanLew(url, collectionId, imageUrl, item) {
             options.addArguments("--disable-dev-shm-usage");
             let driver = new webdriver.Builder()
                 .forBrowser("chrome")
-            //    .setChromeOptions(options)
+                .setChromeOptions(options)
                 .build();
             try {
                 await driver.get(url);
@@ -1065,13 +1068,16 @@ function pollNiftyGatewayCoryVanLew(url, collectionId, imageUrl, item) {
 
                 for (let i = 1; i < 10; i++) { //Only works for items with < 100 offers this can be increased to 1000 though that is unrealistic
                     try {
-                        let price, eventText;
+                        let price, eventText, number;
 
                         eventText = await driver.findElement(webdriver.By.xpath("" +
                             "//html/body/div[1]/div/div[2]/div[1]/div[6]/div[2]/div/div/div[2]/div/div[2]/div[1]/table/tbody/tr[" + i + "]/td[2]/p")).getText();
                         price = await driver.findElement(webdriver.By.xpath("" +
                             "//html/body/div[1]/div/div[2]/div[1]/div[6]/div[2]/div/div/div[2]/div/div[2]/div[1]/table/tbody/tr[" + i + "]/td[3]/span")).getText();
+                        number = await driver.findElement(webdriver.By.xpath("" +
+                            "//html/body/div[1]/div/div[2]/div[1]/div[6]/div[2]/div/div/div[2]/div/div[2]/div[1]/table/tbody/tr["+i+"]/td[1]/a/span/b")).getText();
                         let originalEventText = eventText;
+                        number = number.substr(1);
                         const myArray = eventText.split("from");
                         if (myArray.length > 1) {
                             eventText = item + "\n\n" + myArray[0] + "from" + myArray[1].substring(0, myArray[1].length - 1) + " for " + price + "\n\n" + url;
@@ -1084,16 +1090,37 @@ function pollNiftyGatewayCoryVanLew(url, collectionId, imageUrl, item) {
                                 if (err) {
                                     console.log(err);
                                 } else {
-                                    console.log(res.rowCount);
+                                    console.log(res.rowCount)
                                     if(res.rowCount > 0) {
 
                                     } else {
-                                        pool.query("INSERT INTO TWEETS(VALUE, BOTFROM, URL) VALUES($1, $2, $3);", [originalEventText, "CORYVANLEW", url], (err, res) => {
-                                            if (err) {
-
-                                            } else {
-                                                coryTweet.tweetWithImage(tweetey.text, tweetey.url);
+                                        axios.get('https://api.opensea.io/api/v1/assets', {
+                                            headers: {
+                                                'X-API-KEY': "b31749eab7c44d49a19010375d934d55"
+                                            },
+                                            params: {
+                                                collection_slug: 'cory-van-lew-phase-three-open-edition',
+                                                token_ids: number,
+                                                order_direction: 'desc'
                                             }
+                                        }).then((response) => {
+                                            const assets = _.get(response, ['data', 'assets']);
+                                            imageUrl = "";
+                                            _.each(assets, (asset) => {
+                                                imageUrl = _.get(asset, 'image_url');
+                                            });
+                                            tweetey.url = imageUrl;
+                                            
+                                            pool.query("INSERT INTO TWEETS(VALUE, BOTFROM, URL) VALUES($1, $2, $3);", [originalEventText, "CORYVANLEW", url], (err, res) => {
+                                                if (err) {
+
+                                                } else {
+                                                    coryTweet.tweetWithImage(tweetey.text, tweetey.url);
+                                                }
+                                            });
+                                            
+                                        }).catch((error) => {
+                                            console.error(error);
                                         });
                                     }
                                 }
@@ -1104,6 +1131,7 @@ function pollNiftyGatewayCoryVanLew(url, collectionId, imageUrl, item) {
                     } catch (e) {
                         //console.log("");
                     }
+                    await driver.sleep(1000);
                 }
             } catch (e) {
                 // console.log(e);
@@ -1156,3 +1184,6 @@ function pollNiftyGatewayCoryVanLew(url, collectionId, imageUrl, item) {
     })()
 }
 
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
