@@ -1340,7 +1340,7 @@ function pollNiftyGatewayCoryVanLew(url, collectionId, imageUrl, item) {
             options.addArguments("--disable-dev-shm-usage");
             let driver = new webdriver.Builder()
                 .forBrowser("chrome")
-                //.setChromeOptions(options)
+                .setChromeOptions(options)
                 .build();
             try {
                 await driver.get(url);
