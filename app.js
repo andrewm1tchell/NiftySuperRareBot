@@ -1182,12 +1182,14 @@ function pollSuperRareBen(url, imageUrl, item, useImage) {
                             let tweetText = item + "\n\n" + text + "\n\n" + url;
                             let artistText = (artistname !== "" ? " by " + artistname : "");
                             let tweetText2 = "" + item + artistText + "\n\n" + text + "\n\n" + url;
-                            pool.query("INSERT INTO TWEETS(VALUE, BOTFROM, URL) VALUES($1, $2, $3);", [tweetText, "BEN", url], (err, res) => {
-                                if (err) {
-                                } else {
-                                    tweets.push({text: tweetText2, imageUrl});
-                                }
-                            });
+                            if(text.length > 1) {
+                                pool.query("INSERT INTO TWEETS(VALUE, BOTFROM, URL) VALUES($1, $2, $3);", [tweetText, "BEN", url], (err, res) => {
+                                    if (err) {
+                                    } else {
+                                        tweets.push({text: tweetText2, imageUrl});
+                                    }
+                                });
+                            }
                         }
                     } catch (e) {
                         //   console.log("error " + item)
@@ -1267,13 +1269,15 @@ function pollSuperRarePostWook(url, imageUrl, item) {
                         } else {
                             let tweetText = item + "\n\n" + text + "\n\n" + url;
                             let tweetText2 = "" + item + "\n\n" + text + "\n\n" + url;
-                            pool.query("INSERT INTO TWEETS(VALUE, BOTFROM, URL) VALUES($1, $2, $3);", [tweetText, "POSTWOOK", url], (err, res) => {
-                                if (err) {
-                                    console.log(err);
-                                } else {
-                                    tweets.push({text: tweetText2, imageUrl});
-                                }
-                            });
+                            if(text.length > 1) {
+                                pool.query("INSERT INTO TWEETS(VALUE, BOTFROM, URL) VALUES($1, $2, $3);", [tweetText, "POSTWOOK", url], (err, res) => {
+                                    if (err) {
+                                        console.log(err);
+                                    } else {
+                                        tweets.push({text: tweetText2, imageUrl});
+                                    }
+                                });
+                            }
                         }
                     } catch (e) {
                       //  console.log("error " + item)
