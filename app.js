@@ -1248,7 +1248,7 @@ function pollSuperRarePostWook(url, imageUrl, item) {
             options.addArguments("--disable-dev-shm-usage");
             let driver = new webdriver.Builder()
                 .forBrowser("chrome")
-             //   .setChromeOptions(options)
+                .setChromeOptions(options)
                 .build();
             let tweets = [];
 
