@@ -745,7 +745,7 @@ setInterval(function () {
             }
         }
     }
-}, 1000);
+}, 20000);
 
 function pollNiftyGatewayKarisma(url, collectionId, imageUrl, item) {
     isPolling = true;
@@ -1280,7 +1280,7 @@ function pollSuperRarePostWook(url, imageUrl, item) {
                             }
                         }
                     } catch (e) {
-                      //  console.log("error " + item)
+                        console.log("error " + item)
                     }
                 }
             } finally {
@@ -1297,7 +1297,7 @@ function pollSuperRarePostWook(url, imageUrl, item) {
                 isPolling = false;
                 await driver.quit();
                 for (let i = 0; i < tweets.length; i++) {
-                    await postWookTweet.tweetWithImage(tweets[i].text, tweets[i].imageUrl);
+                 //   await postWookTweet.tweetWithImage(tweets[i].text, tweets[i].imageUrl);
                 }
             }
         } catch(e) {
