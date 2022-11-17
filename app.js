@@ -805,9 +805,9 @@ function pollNiftyGatewayKarisma(url, collectionId, imageUrl, item) {
                             let qry = "SELECT * FROM TWEETS WHERE BOTFROM = 'KARISMA' AND VALUE LIKE '%"+originalEventText+"%';";
                             pool.query(qry, (err,res) => {
                                 if (err) {
-                                    console.log(err);
+                                   // console.log(err);
                                 } else {
-                                    console.log(res.rowCount);
+                                   // console.log(res.rowCount);
                                     if(res.rowCount > 0) {
 
                                     } else {
@@ -815,7 +815,7 @@ function pollNiftyGatewayKarisma(url, collectionId, imageUrl, item) {
                                             if (err) {
 
                                             } else {
-                                                karismaTweet.tweetWithImage(tweetey.text, tweetey.url);
+                                                karismaTweet.tweetWithImage(scrubTextForAt(tweetey.text), tweetey.url);
                                             }
                                         });
                                     }
@@ -846,7 +846,7 @@ function pollNiftyGatewayKarisma(url, collectionId, imageUrl, item) {
                     });
                     isPolling = false;
                 } catch (e) {
-                    console.log(e);
+               //     console.log(e);
                     currentItem++;
                     if(currentItem >= nifties.length)
                     {
@@ -862,7 +862,7 @@ function pollNiftyGatewayKarisma(url, collectionId, imageUrl, item) {
                 }
             }
         } catch (e) {
-            console.log(e);
+        //    console.log(e);
             currentItem++;
             if(currentItem >= nifties.length)
             {
@@ -922,7 +922,7 @@ function pollSuperrareKarisma(url, collectionId, imageUrl, item) {
                                 if (err) {
 
                                 } else {
-                                    karismaTweet.tweetWithImage(tweetey.text, tweetey.url);
+                                    karismaTweet.tweetWithImage(scrubTextForAt(tweetey.text), tweetey.url);
                                 }
                             });
                         }
@@ -931,7 +931,7 @@ function pollSuperrareKarisma(url, collectionId, imageUrl, item) {
                     }
                 }
             } catch (e) {
-                console.log(e);
+                //console.log(e);
             } finally {
                 try {
                     await driver.quit();
@@ -1067,7 +1067,7 @@ function pollNiftyGatewayAzekwoh(url, collectionId, imageUrl, item) {
                                             if (err) {
 
                                             } else {
-                                                azekwohTweet.tweetWithImage(tweetey.text, tweetey.url);
+                                                azekwohTweet.tweetWithImage(scrubTextForAt(tweets[i].text), tweetey.url);
                                             }
                                         });
                                     }
@@ -1209,7 +1209,7 @@ function pollSuperRareBen(url, imageUrl, item, useImage) {
                 isPolling = false;
                 await driver.quit();
                 for (let i = 0; i < tweets.length; i++) {
-                     await benTweet.tweetWithImage(tweets[i].text, tweets[i].imageUrl);
+                     await benTweet.tweetWithImage(scrubTextForAt(tweets[i].text), tweets[i].imageUrl);
                 }
             }
         } catch(e) {
@@ -1272,7 +1272,7 @@ function pollSuperRarePostWook(url, imageUrl, item) {
                             if(text.length > 1) {
                                 pool.query("INSERT INTO TWEETS(VALUE, BOTFROM, URL) VALUES($1, $2, $3);", [tweetText, "POSTWOOK", url], (err, res) => {
                                     if (err) {
-                                        console.log(err);
+                                      //  console.log(err);
                                     } else {
                                         tweets.push({text: tweetText2, imageUrl});
                                     }
@@ -1280,7 +1280,7 @@ function pollSuperRarePostWook(url, imageUrl, item) {
                             }
                         }
                     } catch (e) {
-                        console.log("error " + item)
+                       // console.log("error " + item)
                     }
                 }
             } finally {
@@ -1297,7 +1297,7 @@ function pollSuperRarePostWook(url, imageUrl, item) {
                 isPolling = false;
                 await driver.quit();
                 for (let i = 0; i < tweets.length; i++) {
-                 //   await postWookTweet.tweetWithImage(tweets[i].text, tweets[i].imageUrl);
+                    await postWookTweet.tweetWithImage(scrubTextForAt(tweets[i].text), tweets[i].imageUrl);
                 }
             }
         } catch(e) {
@@ -1378,7 +1378,7 @@ function pollNiftyGatewayCoryVanLew(url, collectionId, imageUrl, item) {
                             let qry = "SELECT * FROM TWEETS WHERE BOTFROM = 'CORYVANLEW' AND VALUE LIKE '%"+originalEventText+"%';";
                             pool.query(qry, (err,res) => {
                                 if (err) {
-                                    console.log(err);
+                                 //   console.log(err);
                                 } else {
                                     console.log(res.rowCount)
                                     if(res.rowCount > 0) {
@@ -1405,7 +1405,7 @@ function pollNiftyGatewayCoryVanLew(url, collectionId, imageUrl, item) {
                                                 if (err) {
 
                                                 } else {
-                                                    coryTweet.tweetWithImage(tweetey.text, tweetey.url);
+                                                    coryTweet.tweetWithImage(scrubTextForAt(tweetey.text), tweetey.url);
                                                 }
                                             });
                                             
@@ -1441,7 +1441,7 @@ function pollNiftyGatewayCoryVanLew(url, collectionId, imageUrl, item) {
                     });
                     isPolling = false;
                 } catch (e) {
-                    console.log(e);
+                 //   console.log(e);
                     currentItem++;
                     if(currentItem >= nifties.length)
                     {
@@ -1457,7 +1457,7 @@ function pollNiftyGatewayCoryVanLew(url, collectionId, imageUrl, item) {
                 }
             }
         } catch (e) {
-            console.log(e);
+           // console.log(e);
             currentItem++;
             if(currentItem >= nifties.length)
             {
@@ -1472,6 +1472,13 @@ function pollNiftyGatewayCoryVanLew(url, collectionId, imageUrl, item) {
             isPolling = false;
         }
     })()
+}
+
+function scrubTextForAt(text){
+    while(text.indexOf("@") >= 0) {
+        text = text.replace("@", "");
+    }
+    return text;
 }
 
 function sleep(ms) {
