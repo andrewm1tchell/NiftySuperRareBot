@@ -11,11 +11,49 @@ const karismaTweet = require("./Artists/krisma_tweet");
 const azekwohTweet = require("./Artists/azekowh_tweet");
 const benTweet = require("./Artists/ben_tweet");
 const coryTweet = require("./Artists/cory_tweet");
+const andrewTweet = require("./Artists/andrewMitchell_tweet");
 const postWookTweet = require("./Artists/postwook_tweet");
 const webdriver = require("selenium-webdriver");
 const chrome = require("selenium-webdriver/chrome");
 
 const nifties = [
+    {
+        url: "https://www.niftygateway.com/marketplace/collection/0xeccb6e6837fdb43f1ff14db95e666ca0c00f3b07/1",
+        image: "https://media.niftygateway.com/image/upload/q_auto:good,w_500,c_limit/v1668843261/test-media-manager/richcaldwell/956/2409/TouchGrass.png",
+        name: "Touch Grass",
+        isSR: false,
+        bot: "ANDREWMITCHELL"
+    },{
+        url: "https://www.niftygateway.com/marketplace/collection/0xeccb6e6837fdb43f1ff14db95e666ca0c00f3b07/2",
+        image: "https://media.niftygateway.com/image/upload/q_auto:good,w_500,c_limit/v1668842864/test-media-manager/richcaldwell/956/1952/Fortress_2.png",
+        name: "Fortress",
+        isSR: false,
+        bot: "ANDREWMITCHELL"
+    },{
+        url: "https://www.niftygateway.com/marketplace/collection/0xeccb6e6837fdb43f1ff14db95e666ca0c00f3b07/3",
+        image: "https://media.niftygateway.com/image/upload/q_auto:good,w_500,c_limit/v1668067247/test-media-manager/richcaldwell/956/1950/Hiding%20Place_3.png",
+        name: "Hiding Place",
+        isSR: false,
+        bot: "ANDREWMITCHELL"
+    },{
+        url: "https://www.niftygateway.com/marketplace/collection/0xeccb6e6837fdb43f1ff14db95e666ca0c00f3b07/4",
+        image: "https://media.niftygateway.com/image/upload/q_auto:good,w_500,c_limit/v1668067311/test-media-manager/richcaldwell/956/1951/Sleep_4.png",
+        name: "Sleep",
+        isSR: false,
+        bot: "ANDREWMITCHELL"
+    },{
+        url: "https://www.niftygateway.com/marketplace/collection/0xeccb6e6837fdb43f1ff14db95e666ca0c00f3b07/5",
+        image: "https://media.niftygateway.com/image/upload/q_auto:good,w_500,c_limit/v1668067115/test-media-manager/richcaldwell/956/1948/Charm_1.png",
+        name: "Charm",
+        isSR: false,
+        bot: "ANDREWMITCHELL"
+    },{
+        url: "https://www.niftygateway.com/marketplace/collection/0xeccb6e6837fdb43f1ff14db95e666ca0c00f3b07/6",
+        image: "https://media.niftygateway.com/image/upload/q_auto:good,w_500,c_limit/v1668067173/test-media-manager/richcaldwell/956/1949/Mother_2.png",
+        name: "Mother",
+        isSR: false,
+        bot: "ANDREWMITCHELL"
+    },
     {
         "url": "https://superrare.com/0x4b64125c8c5c25e3e75ed85850845d5e2be397a7/blue-muse,-2022-11",
         "image": "https://ipfs.pixura.io/ipfs/QmNht7BAHBbjVY6JTi686BMACpWdPHPHcaPfAFY3nqSvwc/blue-muse-2022.jpg",
@@ -697,7 +735,7 @@ const nifties = [
         ,useImage: false, bot: "BEN" }
 ];
 
-let currentItem =  0;//null
+let currentItem =  null;
 let isPolling = false;
 setInterval(function () {
     if(!isPolling) {
@@ -722,12 +760,14 @@ setInterval(function () {
                         pollNiftyGatewayCoryVanLew(current.url, currentItem + 1, current.image,current.name);
                     } else if(current.bot === "POSTWOOK") {
                         pollSuperRarePostWook(current.url, current.image, current.item);
-                    }
+                    } else if(current.bot === "ANDREWMITCHELL") {
+                        pollNiftyGatewayAndrewMitchell(current.url, currentItem + 1, current.image,current.name);
+                    } 
                 }
             });
         } else {
             let current = nifties[currentItem];
-
+            console.log(current);
             if (current.bot === "BEN") {
                 pollSuperRareBen(current.url, current.imageUrl, current.item, current.useImage);
             } else if(current.bot === "AZEKWOH") {
@@ -742,10 +782,12 @@ setInterval(function () {
                 pollNiftyGatewayCoryVanLew(current.url, currentItem + 1, current.image,current.name);
             } else if(current.bot === "POSTWOOK") {
                 pollSuperRarePostWook(current.url, current.image, current.name);
+            } else if(current.bot === "ANDREWMITCHELL") {
+                pollNiftyGatewayAndrewMitchell(current.url, currentItem + 1, current.image,current.name);
             }
         }
     }
-}, 20000);
+}, 60000);
 
 function pollNiftyGatewayKarisma(url, collectionId, imageUrl, item) {
     isPolling = true;
@@ -775,16 +817,16 @@ function pollNiftyGatewayKarisma(url, collectionId, imageUrl, item) {
             try {
                 await driver.get(url);
                 
-                await driver.sleep(10000);
+                await driver.sleep(15000);
                 //Click History
                 await driver.findElement(webdriver.By.xpath("" +
                     "//html/body/div[1]/div/div[2]/div[1]/div[4]/div/div/div/button[2]")).click();
-                await driver.sleep(10000);
+                await driver.sleep(15000);
 
                 //Click Sales Only
                 await driver.findElement(webdriver.By.xpath("" +
                     "//html/body/div[1]/div/div[2]/div[1]/div[6]/div[2]/div/div/div[2]/div/div[1]/label/span[1]/span[1]/input")).click();
-                await driver.sleep(10000);
+                await driver.sleep(15000);
                 
                 for (let i = 1; i < 10; i++) { //Only works for items with < 100 offers this can be increased to 1000 though that is unrealistic
                     try {
@@ -1016,23 +1058,23 @@ function pollNiftyGatewayAzekwoh(url, collectionId, imageUrl, item) {
                     ///html/body/div[1]/div/div[2]/div/div[5]/div/div/div[1]/div/div[2]/div/button[2]
                     await driver.findElement(webdriver.By.xpath("" +
                         "//html/body/div[1]/div/div[2]/div/div[5]/div/div/div[1]/div/div[2]/div/button[2]")).click();
-                    await driver.sleep(10000);
+                    await driver.sleep(15000);
 
                     //Click Sales Only
                     await driver.findElement(webdriver.By.xpath("" +
                         "//html/body/div[1]/div/div[2]/div/div[5]/div/div/div[2]/div[2]/div[1]/label/span[1]/span[1]/input")).click();
-                    await driver.sleep(10000);
+                    await driver.sleep(15000);
                 } else if (collectionId > 0) {
-                    await driver.sleep(10000);
+                    await driver.sleep(15000);
                     //Click History
                     await driver.findElement(webdriver.By.xpath("" +
                         "//html/body/div[1]/div/div[2]/div[1]/div[4]/div/div/div/button[2]")).click();
-                    await driver.sleep(10000);
+                    await driver.sleep(15000);
 
                     //Click Sales Only
                     await driver.findElement(webdriver.By.xpath("" +
                         "//html/body/div[1]/div/div[2]/div[1]/div[6]/div[2]/div/div/div[2]/div/div[1]/label/span[1]/span[1]/input")).click();
-                    await driver.sleep(10000);
+                    await driver.sleep(15000);
                 }
                 for (let i = 1; i < 10; i++) { //Only works for items with < 100 offers this can be increased to 1000 though that is unrealistic
                     try {
@@ -1345,16 +1387,16 @@ function pollNiftyGatewayCoryVanLew(url, collectionId, imageUrl, item) {
             try {
                 await driver.get(url);
 
-                await driver.sleep(10000);
+                await driver.sleep(15000);
                 //Click History
                 await driver.findElement(webdriver.By.xpath("" +
                     "//html/body/div[1]/div/div[2]/div[1]/div[4]/div/div/div/button[2]")).click();
-                await driver.sleep(10000);
+                await driver.sleep(15000);
 
                 //Click Sales Only
                 await driver.findElement(webdriver.By.xpath("" +
                     "//html/body/div[1]/div/div[2]/div[1]/div[6]/div[2]/div/div/div[2]/div/div[1]/label/span[1]/span[1]/input")).click();
-                await driver.sleep(10000);
+                await driver.sleep(15000);
 
                 for (let i = 1; i < 10; i++) { //Only works for items with < 100 offers this can be increased to 1000 though that is unrealistic
                     try {
@@ -1458,6 +1500,141 @@ function pollNiftyGatewayCoryVanLew(url, collectionId, imageUrl, item) {
             }
         } catch (e) {
            // console.log(e);
+            currentItem++;
+            if(currentItem >= nifties.length)
+            {
+                currentItem = 0;
+            }
+            pool.query("UPDATE CURRENTITEM SET VALUE = "+currentItem+"  WHERE ID = 1;", (err, res) => {
+                if (err) {
+
+                } else {
+                }
+            });
+            isPolling = false;
+        }
+    })()
+}
+function pollNiftyGatewayAndrewMitchell(url, collectionId, imageUrl, item) {
+    isPolling = true;
+    console.log("Searching item:" + url);
+    let tweets = [];
+
+    (async function goToNiftyUrl() {
+        try {
+            const webdriver = require('selenium-webdriver');
+            require('chromedriver');
+            const chrome = require('selenium-webdriver/chrome');
+
+            let options = new chrome.Options();
+            options.setChromeBinaryPath(process.env.CHROME_BINARY_PATH);
+
+            //Don't forget to add these for heroku
+            options.addArguments("--headless");
+            options.addArguments("--disable-gpu");
+            options.addArguments("--no-sandbox");
+            options.addArguments("enable-automation");
+            options.addArguments("--disable-infobars");
+            options.addArguments("--disable-dev-shm-usage");
+            let driver = new webdriver.Builder()
+                .forBrowser("chrome")
+                .setChromeOptions(options)
+                .build();
+            try {
+                await driver.get(url);
+
+                await driver.sleep(15000);
+                //Click History
+                await driver.findElement(webdriver.By.xpath("" +
+                    "//html/body/div[1]/div/div[2]/div[1]/div[4]/div/div/div/button[2]")).click();
+                await driver.sleep(15000);
+
+                //Click Sales Only
+                await driver.findElement(webdriver.By.xpath("" +
+                    "//html/body/div[1]/div/div[2]/div[1]/div[6]/div[2]/div/div/div[2]/div/div[1]/label/span[1]/span[1]/input")).click();
+                await driver.sleep(15000);
+
+                for (let i = 1; i < 10; i++) { //Only works for items with < 100 offers this can be increased to 1000 though that is unrealistic
+                    try {
+                        let price, eventText, number;
+                        eventText = await driver.findElement(webdriver.By.xpath("" +
+                            "//html/body/div[1]/div/div[2]/div[1]/div[6]/div[2]/div/div/div[2]/div/div[2]/div[1]/table/tbody/tr[" + i + "]/td[2]/p")).getText();
+                        price = await driver.findElement(webdriver.By.xpath("" +
+                            "//html/body/div[1]/div/div[2]/div[1]/div[6]/div[2]/div/div/div[2]/div/div[2]/div[1]/table/tbody/tr[" + i + "]/td[3]/span")).getText();
+                        number = await driver.findElement(webdriver.By.xpath("" +
+                            "//html/body/div[1]/div/div[2]/div[1]/div[6]/div[2]/div/div/div[2]/div/div[2]/div[1]/table/tbody/tr["+i+"]/td[1]/a/span/b")).getText();
+                        let originalEventText = eventText;
+                        console.log(originalEventText);
+                        number = number.substr(1);
+                        const myArray = eventText.split("from");
+                        if (myArray.length > 1) {
+                            eventText = item + "\n\n" + originalEventText + "\n\nPrice:" + price + "\n\n" + url;
+                            let tweetey = {
+                                text: eventText,
+                                url: imageUrl
+                            };
+                            let qry = "SELECT * FROM TWEETS WHERE BOTFROM = 'ANDREWMITCHELL' AND VALUE LIKE '%"+originalEventText+"%';";
+                            pool.query(qry, (err,res) => {
+                                if (err) {
+                                    //   console.log(err);
+                                } else {
+                                    console.log(res.rowCount)
+                                    if(res.rowCount > 0) {
+
+                                    } else {
+                                        pool.query("INSERT INTO TWEETS(VALUE, BOTFROM, URL) VALUES($1, $2, $3);", [originalEventText, "ANDREWMITCHELL", url], (err, res) => {
+                                            if (err) {
+    
+                                            } else {
+                                                andrewTweet.tweetWithImage(scrubTextForAt(tweetey.text), tweetey.url);
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+
+
+                        }
+                    } catch (e) {
+                        //console.log("");
+                    }
+                    await driver.sleep(1000);
+                }
+            } catch (e) {
+                // console.log(e);
+            } finally {
+                try {
+                    await driver.quit();
+                    currentItem++;
+                    if(currentItem >= nifties.length)
+                    {
+                        currentItem = 0;
+                    }
+                    pool.query("UPDATE CURRENTITEM SET VALUE = "+currentItem+"  WHERE ID = 1;", (err, res) => {
+                        if (err) {
+
+                        } else {
+                        }
+                    });
+                    isPolling = false;
+                } catch (e) {
+                    //   console.log(e);
+                    currentItem++;
+                    if(currentItem >= nifties.length)
+                    {
+                        currentItem = 0;
+                    }
+                    pool.query("UPDATE CURRENTITEM SET VALUE = "+currentItem+"  WHERE ID = 1;", (err, res) => {
+                        if (err) {
+
+                        } else {
+                        }
+                    });
+                    isPolling = false;
+                }
+            }
+        } catch (e) {
+            // console.log(e);
             currentItem++;
             if(currentItem >= nifties.length)
             {
